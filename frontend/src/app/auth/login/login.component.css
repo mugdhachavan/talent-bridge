@@ -1,0 +1,152 @@
+/* =====================
+   LOGIN PAGE BACKGROUND
+   ===================== */
+.login-page {
+  background: var(--bs-primary-bg-subtle);
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* =====================
+   LOGIN CARD STYLING
+   ===================== */
+.login-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(57, 54, 222, 0.411);
+}
+
+.login-card h3 {
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.login-card .form-control {
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card .form-control:focus {
+  border-color: #0066cc;
+  box-shadow: 0 0 0 3px rgba(12, 123, 235, 0.2);
+}
+
+.login-card .btn-primary {
+
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.75rem;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+.login-logo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--login-space-xl);
+  background: linear-gradient(135deg, var(--login-primary) 0%, var(--login-accent) 100%);
+  border-radius: var(--login-radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--login-shadow-lg);
+  
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
+  }
+}
+
+.login-logo svg {
+  width: 32px;
+  height: 32px;
+  color: var(--login-text-white);
+}
+
+.login-header {
+  display: flex;
+  justify-content: center; /* center horizontally in the page */
+  margin-bottom: 2rem;
+}
+
+.login-header-content {
+  display: flex;
+  align-items: center; /* vertically align logo and text */
+  gap: 1rem; /* space between logo and text */
+}
+
+.login-logo svg {
+  width: 50px;
+  height: 50px;
+  color: var(--color-primary); /* optional, use your brand color */
+}
+
+.login-texts {
+  display: flex;
+  flex-direction: column; /* stack title and subtitle vertically */
+}
+
+.login-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+.login-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center everything horizontally */
+  margin-bottom: 2rem;
+}
+
+.login-header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem; /* space between logo+title and subtitle */
+}
+
+/* Logo + H1 inline */
+.logo-and-title {
+  display: flex;
+  align-items: center; /* vertically align logo and h1 */
+  gap: 0.2rem; /* space between logo and h1 */
+}
+
+.login-logo svg {
+  width: 30px;  /* smaller size */
+  height: 30px;
+  color: var(--color-primary); /* optional brand color */
+}
+
+.login-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  margin: 0;
+  color: var(--color-text-secondary);
+  text-align: center;
+}

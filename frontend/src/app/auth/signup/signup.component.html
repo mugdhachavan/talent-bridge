@@ -1,0 +1,138 @@
+<div class="container mt-5">
+  <div class="signup-page">
+    <div class="signup-card">
+
+      <h3 class="text-center mb-4">Create Your TalentBridge Account</h3>
+
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+
+        <!-- Username -->
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="username"
+            placeholder="Enter your username"
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label class="form-label">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            formControlName="email"
+            aria-describedby="emailHelp"
+            placeholder="Enter email"
+          />
+          <div id="emailHelp" class="form-text">
+            We'll never share your email with anyone else.
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            formControlName="password"
+            placeholder="Enter password"
+          />
+        </div>
+
+        <!-- Skills -->
+        <div class="mb-3">
+          <label class="form-label">Technical Skills</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="skills"
+            placeholder="Java, Angular, Node.js"
+          />
+        </div>
+
+        <!-- Degree -->
+        <div class="mb-3">
+          <label class="form-label">Degree</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="degree"
+            placeholder="B.Tech / MCA / BSc"
+          />
+        </div>
+
+        <!-- Institute -->
+        <div class="mb-3">
+          <label class="form-label">Institute</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="institute"
+            placeholder="College / University name"
+          />
+        </div>
+
+        <!-- Year -->
+        <div class="mb-3">
+          <label class="form-label">Passing Year</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="year"
+            placeholder="2024"
+          />
+        </div>
+
+        <!-- Profile Photo -->
+        <div class="mb-3">
+          <label class="form-label">Profile Photo</label>
+          <input
+            class="form-control"
+            type="file"
+            accept="image/*"
+            (change)="onFileChange($event, 'photo')"
+          />
+        </div>
+
+        <!-- Resume -->
+        <div class="mb-3">
+          <label class="form-label">Resume (PDF/DOC)</label>
+          <input
+            class="form-control"
+            type="file"
+            accept=".pdf,.doc,.docx"
+            (change)="onFileChange($event, 'resume')"
+          />
+        </div>
+
+        <!-- Terms -->
+        <div class="mb-3 form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="termsCheck"
+            required
+          />
+          <label class="form-check-label" for="termsCheck">
+            I agree to the terms & conditions
+          </label>
+        </div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="btn btn-primary w-100"
+          [disabled]="signupForm.invalid"
+        >
+          Sign Up
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+</div>

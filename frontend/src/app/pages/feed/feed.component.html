@@ -1,0 +1,93 @@
+<div class="feed-container">
+  <h2 class="container my-3 text-center">
+    Explore Professionals. Learn Skills. Connect
+  </h2>
+
+  <!-- ====== NEW: SEARCH & FILTER BAR ====== -->
+  <div class="search-container container">
+    <div class="search-wrapper">
+      <!-- Search Input -->
+      <div class="search-input-group">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" placeholder="Search by name, education, or skills..."
+          [(ngModel)]="searchQuery" (input)="applyFilter()" />
+        <button *ngIf="searchQuery" class="clear-btn" (click)="clearSearch()" aria-label="Clear search">
+          ✕
+        </button>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="filter-buttons">
+        <button class="filter-btn" [class.active]="filterType === 'all'" (click)="filterType = 'all'; applyFilter()">
+          <span class="filter-icon">🌐</span>
+          All
+        </button>
+        <button class="filter-btn" [class.active]="filterType === 'name'" (click)="filterType = 'name'; applyFilter()">
+          <span class="filter-icon">👤</span>
+          Name
+        </button>
+        <button class="filter-btn" [class.active]="filterType === 'skills'"
+          (click)="filterType = 'skills'; applyFilter()">
+          <span class="filter-icon">💼</span>
+          Skills
+        </button>
+        <mat-form-field appearance="outline" class="filter-select">
+          <mat-label>Education 🎓</mat-label>
+          <mat-select [(value)]="selectedEducation" (selectionChange)="filterType = 'education'; applyFilter()">
+            <mat-option value="">All</mat-option>
+            <mat-option value="BTech">Bachelors</mat-option>
+            <mat-option value="MTech">Masters</mat-option>
+            <mat-option value="PhD">PhD</mat-option>
+            <mat-option value="Diploma">Diploma</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        
+      </div>
+    </div>
+
+    <!-- Results Count 
+    <div class="results-info" *ngIf="searchQuery">
+      <span class="results-count">
+        {{ filteredUsers.length }} result{{ filteredUsers.length !== 1 ? 's' : '' }} found
+      </span>
+    </div>-->
+    <div class="filtered-count text-center" *ngIf="filteredUsers.length > 0">
+      Showing {{ filteredUsers.length }} of {{ users.length }} profiles
+    </div>
+    <div class="filtered-count text-center" *ngIf="filteredUsers.length === 0">
+      No profiles found
+    </div>
+  </div>
+  <!-- ====== END SEARCH & FILTER BAR ====== -->
+
+  <!-- Error Message -->
+  <p *ngIf="errorMessage" class="text-danger text-center">{{ errorMessage }}</p>
+
+  <!-- No Results 
+  <p *ngIf="!loading && filteredUsers.length === 0 && !errorMessage" class="text-center no-results">
+    <span class="no-results-icon">🔍</span>
+    <span *ngIf="searchQuery">No profiles found matching "{{ searchQuery }}"</span>
+    <span *ngIf="!searchQuery">No profiles found.</span>
+  </p>-->
+
+
+  <!-- Profile Cards (using filteredUsers instead of users) -->
+  <div *ngIf="filteredUsers.length > 0" class="d-flex flex-column align-items-center feed-wrapper">
+    <div *ngFor="let user of filteredUsers; trackBy: trackByUserId"
+      class="feed-card card w-75 mb-4 shadow bg-body-tertiary rounded-4" (click)="openProfileDialog(user)">
+      <div class="card-body d-flex align-items-center">
+        <img [src]="getProfileImage(user.profilePhoto)" alt="Profile" class="rounded-circle me-3" width="120"
+          height="120" />
+        <div class="user-info">
+          <h5 class="card-title mb-1">{{ user.username }}</h5>
+          <!-- Optional: Show matched fields -->
+          <p class="card-subtitle text-muted mb-0" *ngIf="user.skills">
+            <small>{{ user.skills }}</small>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

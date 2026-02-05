@@ -1,0 +1,71 @@
+<div class="login-page d-flex justify-content-center align-items-center vh-100">
+  <div class="login-card p-5">
+<header class="login-header">
+  <div class="login-header-content">
+    <!-- Logo + H1 together -->
+    <div class="logo-and-title">
+      <div class="login-logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path 
+            d="M12 2L2 7L12 12L22 7L12 2Z" 
+            stroke="currentColor" 
+            stroke-width="2" 
+            stroke-linecap="round" 
+            stroke-linejoin="round"/>
+          <path 
+            d="M2 17L12 22L22 17" 
+            stroke="currentColor" 
+            stroke-width="2" 
+            stroke-linecap="round" 
+            stroke-linejoin="round"/>
+          <path 
+            d="M2 12L12 17L22 12" 
+            stroke="currentColor" 
+            stroke-width="2" 
+            stroke-linecap="round" 
+            stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h1 class="login-title">Welcome Back</h1>
+    </div>
+
+    <!-- Subtitle below -->
+    <h6 class="login-subtitle">Sign in to continue to TalentBridge</h6>
+  </div>
+</header>
+
+
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" formControlName="email" placeholder="Enter your email">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-control" formControlName="password" placeholder="Enter your password">
+      </div>
+
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="rememberCheck">
+        <label class="form-check-label" for="rememberCheck">Remember me</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+
+     <!-- Footer / Signup prompt -->
+      <footer class="login-footer text-center">
+        <p class="signup-prompt mb-0">
+          Don't have an account?
+          <a href="javascript:void(0)" class="signup-link" (click)="navigateToSignUp()" tabindex="0">
+            Create one now
+          </a>
+        </p>
+      </footer>
+
+
+    </form>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+form {
+  width: 420px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+input, button {
+  margin: 8px 0;
+  padding: 10px;
+}
+
+button {
+  background-color: #0a66c2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+/* Full-page center without changing background */
+.signup-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* White signup card */
+.signup-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 520px;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}

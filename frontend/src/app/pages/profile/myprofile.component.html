@@ -1,0 +1,786 @@
+<!-- ===========================
+     MY PROFILE COMPONENT TEMPLATE
+     Version: 1.0.0
+     =========================== -->
+
+<div class="profile-container" role="main">
+  
+  <!-- ===========================
+       PROFILE HEADER SECTION
+       =========================== -->
+  <header class="profile-header" aria-label="Profile header">
+    <div class="profile-header-content">
+      
+      <!-- Profile Avatar -->
+      <section class="profile-avatar-section" aria-label="Profile photo">
+        <!-- Avatar with Photo -->
+        <div class="profile-avatar-large" 
+             *ngIf="profileData.profilePhoto"
+             role="img"
+             [attr.aria-label]="profileData.name + ' profile photo'">
+          <img 
+            [src]="getProfileImageUrl()" 
+            [alt]="profileData.name + ' profile photo'"
+            loading="eager">
+          <button 
+            class="avatar-edit-button" 
+            (click)="openPhotoUpload()"
+            type="button"
+            aria-label="Change profile photo">
+            <svg 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path 
+                d="M23 19C23 19.5304 22.7893 20.0391 22.4142 20.4142C22.0391 20.7893 21.5304 21 21 21H3C2.46957 21 1.96086 20.7893 1.58579 20.4142C1.21071 20.0391 1 19.5304 1 19V8C1 7.46957 1.21071 6.96086 1.58579 6.58579C1.96086 6.21071 2.46957 6 3 6H7L9 3H15L17 6H21C21.5304 6 22.0391 6.21071 22.4142 6.58579C22.7893 6.96086 23 7.46957 23 8V19Z" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <circle 
+                cx="12" 
+                cy="13" 
+                r="4" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Avatar Placeholder (No Photo) -->
+        <div class="profile-avatar-large profile-avatar-placeholder" 
+             *ngIf="!profileData.profilePhoto"
+             role="img"
+             [attr.aria-label]="(profileData.name || 'User') + ' initials'">
+          <span aria-hidden="true">{{ getInitials() }}</span>
+          <button 
+            class="avatar-edit-button" 
+            (click)="openPhotoUpload()"
+            type="button"
+            aria-label="Add profile photo">
+            <svg 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path 
+                d="M23 19C23 19.5304 22.7893 20.0391 22.4142 20.4142C22.0391 20.7893 21.5304 21 21 21H3C2.46957 21 1.96086 20.7893 1.58579 20.4142C1.21071 20.0391 1 19.5304 1 19V8C1 7.46957 1.21071 6.96086 1.58579 6.58579C1.96086 6.21071 2.46957 6 3 6H7L9 3H15L17 6H21C21.5304 6 22.0391 6.21071 22.4142 6.58579C22.7893 6.96086 23 7.46957 23 8V19Z" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <circle 
+                cx="12" 
+                cy="13" 
+                r="4" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Hidden File Input for Photo Upload -->
+        <input 
+          type="file" 
+          #photoInput 
+          accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" 
+          (change)="onPhotoSelected($event)" 
+          style="display: none;"
+          aria-hidden="true"
+          tabindex="-1">
+      </section>
+      
+      <!-- Profile Info -->
+      <div class="profile-header-info">
+        <h1 class="profile-name">{{ profileData.name || 'Your Name' }}</h1>
+        <p class="profile-headline">
+          {{ profileData.degree || 'Your Degree' }} • {{ profileData.institute || 'Your Institute' }}
+        </p>
+        <p class="profile-email">
+          <span class="sr-only">Email:</span>
+          {{ profileData.email || 'your.email@example.com' }}
+        </p>
+        
+        <!-- Profile Action Buttons -->
+        <nav class="profile-actions" aria-label="Profile actions">
+          <button 
+            class="btn btn-primary" 
+            (click)="navigateToEdit()"
+            type="button"
+            aria-label="Edit profile">
+            <svg 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path 
+                d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <path 
+                d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.4374 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+            </svg>
+            <span>Edit Profile</span>
+          </button>
+          
+          <button 
+            class="btn btn-outline" 
+            (click)="shareProfile()"
+            type="button"
+            aria-label="Share profile">
+            <svg 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="2"/>
+              <circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+              <circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="2"/>
+              <path d="M8.59 13.51L15.42 17.49M15.41 6.51L8.59 10.49" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span>Share Profile</span>
+          </button>
+        </nav>
+      </div>
+      
+    </div>
+  </header>
+
+  <!-- ===========================
+       PROFILE CONTENT SECTION
+       =========================== -->
+  <div class="profile-content">
+    <div class="profile-grid">
+      
+      <!-- ===========================
+           ABOUT SECTION
+           =========================== -->
+      <article class="profile-card" aria-labelledby="about-heading">
+        <header class="card-header">
+          <h2 class="card-title" id="about-heading">
+            <svg 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path 
+                d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span>About</span>
+          </h2>
+          <button 
+            class="card-action" 
+            (click)="editSection('about')"
+            type="button"
+            aria-label="Edit about section">
+            Edit
+          </button>
+        </header>
+        <div class="card-content">
+          <dl class="info-grid">
+            <div class="info-item">
+              <dt class="info-label">Full Name</dt>
+              <dd class="info-value">{{ profileData.name || 'Not set' }}</dd>
+            </div>
+            <div class="info-item">
+              <dt class="info-label">Email</dt>
+              <dd class="info-value">{{ profileData.email || 'Not set' }}</dd>
+            </div>
+            <div class="info-item">
+              <dt class="info-label">Graduation Year</dt>
+              <dd class="info-value">{{ profileData.graduationYear || 'Not set' }}</dd>
+            </div>
+          </dl>
+        </div>
+      </article>
+
+      <!-- ===========================
+           EDUCATION SECTION
+           =========================== -->
+      <article class="profile-card" aria-labelledby="education-heading">
+        <header class="card-header">
+          <h2 class="card-title" id="education-heading">
+            <svg 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path 
+                d="M22 10V16C22 17.1046 21.1046 18 20 18H4C2.89543 18 2 17.1046 2 16V10" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round"/>
+              <path 
+                d="M12 14L2 9L12 4L22 9L12 14Z" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <path 
+                d="M2 9V14" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round"/>
+            </svg>
+            <span>Education</span>
+          </h2>
+          <button 
+            class="card-action" 
+            (click)="editSection('education')"
+            type="button"
+            aria-label="Edit education section">
+            Edit
+          </button>
+        </header>
+        <div class="card-content">
+          <div class="education-item">
+            <div class="education-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path 
+                  d="M22 10V16C22 17.1046 21.1046 18 20 18H4C2.89543 18 2 17.1046 2 16V10" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round"/>
+                <path 
+                  d="M12 14L2 9L12 4L22 9L12 14Z" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="education-details">
+              <h3 class="education-degree">{{ profileData.degree || 'Your Degree' }}</h3>
+              <p class="education-institute">{{ profileData.institute || 'Your Institute' }}</p>
+              <p class="education-year" *ngIf="profileData.graduationYear">
+                Class of {{ profileData.graduationYear }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===========================
+           SKILLS SECTION
+           =========================== -->
+      <article class="profile-card" aria-labelledby="skills-heading">
+        <header class="card-header">
+          <h2 class="card-title" id="skills-heading">
+            <svg 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path 
+                d="M12 2L2 7L12 12L22 7L12 2Z" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <path 
+                d="M2 17L12 22L22 17" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <path 
+                d="M2 12L12 17L22 12" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+            </svg>
+            <span>Skills</span>
+          </h2>
+          <button 
+            class="card-action" 
+            (click)="editSection('skills')"
+            type="button"
+            aria-label="Edit skills section">
+            Edit
+          </button>
+        </header>
+        <div class="card-content">
+          <!-- Skills List -->
+          <div 
+            class="skills-container" 
+            *ngIf="getSkillsArray().length > 0"
+            role="list"
+            aria-label="Skills list">
+            <span 
+              class="skill-tag" 
+              *ngFor="let skill of getSkillsArray(); trackBy: trackBySkill"
+              role="listitem">
+              {{ skill }}
+            </span>
+          </div>
+          
+          <!-- Empty State -->
+          <div class="empty-state" *ngIf="getSkillsArray().length === 0">
+            <p>No skills added yet. Add your skills to showcase your expertise!</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===========================
+           RESUME SECTION
+           =========================== -->
+      <article class="profile-card" aria-labelledby="resume-heading">
+        <header class="card-header">
+          <h2 class="card-title" id="resume-heading">
+            <svg 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path 
+                d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <path 
+                d="M14 2V8H20" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <path 
+                d="M16 13H8" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <path 
+                d="M16 17H8" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <path 
+                d="M10 9H9H8" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+            </svg>
+            <span>Resume</span>
+          </h2>
+          <button 
+            class="card-action" 
+            (click)="uploadResume()"
+            type="button"
+            aria-label="Upload new resume">
+            {{ profileData.resume ? 'Replace' : 'Upload' }}
+          </button>
+        </header>
+        <div class="card-content">
+          <!-- Resume Item (When Uploaded) -->
+          <div class="resume-item" *ngIf="profileData.resume">
+            <div class="resume-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path 
+                  d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"/>
+                <path 
+                  d="M14 2V8H20" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="resume-details">
+              <h3 class="resume-name">{{ getResumeFileName() }}</h3>
+              <p class="resume-info">PDF Document • {{ getResumeSize() }}</p>
+            </div>
+            <nav class="resume-actions" aria-label="Resume actions">
+              <button 
+                class="icon-btn" 
+                (click)="downloadResume()"
+                type="button"
+                title="Download resume"
+                aria-label="Download resume">
+                <svg 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true">
+                  <path 
+                    d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" 
+                    stroke="currentColor" 
+                    stroke-width="2" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"/>
+                  <path 
+                    d="M7 10L12 15L17 10" 
+                    stroke="currentColor" 
+                    stroke-width="2" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"/>
+                  <path 
+                    d="M12 15V3" 
+                    stroke="currentColor" 
+                    stroke-width="2" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button 
+                class="icon-btn" 
+                (click)="viewResume()"
+                type="button"
+                title="View resume"
+                aria-label="View resume">
+                <svg 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true">
+                  <path 
+                    d="M1 12S5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" 
+                    stroke="currentColor" 
+                    stroke-width="2" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"/>
+                  <circle 
+                    cx="12" 
+                    cy="12" 
+                    r="3" 
+                    stroke="currentColor" 
+                    stroke-width="2" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </nav>
+          </div>
+          
+          <!-- Upload Prompt (No Resume) -->
+          <div class="upload-prompt" *ngIf="!profileData.resume">
+            <svg 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path 
+                d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <path 
+                d="M17 8L12 3L7 8" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <path 
+                d="M12 3V15" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+            </svg>
+            <p>No resume uploaded yet</p>
+            <button 
+              class="btn btn-primary" 
+              (click)="uploadResume()"
+              type="button"
+              aria-label="Upload resume">
+              Upload Resume
+            </button>
+          </div>
+          
+          <!-- Hidden File Input for Resume Upload -->
+          <input 
+            type="file" 
+            #resumeInput 
+            accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" 
+            (change)="onResumeSelected($event)" 
+            style="display: none;"
+            aria-hidden="true"
+            tabindex="-1">
+        </div>
+      </article>
+
+      <!-- ===========================
+           PROFILE COMPLETENESS
+           =========================== -->
+      <article 
+        class="profile-card completeness-card" 
+        aria-labelledby="completeness-heading">
+        <header class="card-header">
+          <h2 class="card-title" id="completeness-heading">
+            <svg 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path 
+                d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+              <path 
+                d="M22 4L12 14.01L9 11.01" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+            </svg>
+            <span>Profile Completeness</span>
+          </h2>
+        </header>
+        <div class="card-content">
+          <!-- Progress Section -->
+          <section class="progress-section" aria-labelledby="progress-label">
+            <div class="progress-header">
+              <span class="progress-label" id="progress-label">
+                {{ getProfileCompleteness() }}% Complete
+              </span>
+              <span class="progress-value" aria-label="Completed fields">
+                {{ getCompletedFields() }}/{{ getTotalFields() }} fields
+              </span>
+            </div>
+            <div 
+              class="progress-bar" 
+              role="progressbar" 
+              [attr.aria-valuenow]="getProfileCompleteness()" 
+              aria-valuemin="0" 
+              aria-valuemax="100"
+              [attr.aria-label]="'Profile ' + getProfileCompleteness() + '% complete'">
+              <div 
+                class="progress-fill" 
+                [style.width.%]="getProfileCompleteness()">
+              </div>
+            </div>
+          </section>
+          
+          <!-- Completeness Checklist -->
+          <div class="checklist" role="list" aria-label="Profile completeness checklist">
+            <!-- Profile Photo -->
+            <div 
+              class="checklist-item" 
+              [class.completed]="profileData.profilePhoto"
+              role="listitem">
+              <svg 
+                class="checklist-icon" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path 
+                  d="M8 12L11 15L16 9" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  *ngIf="profileData.profilePhoto"/>
+              </svg>
+              <span>Profile Photo</span>
+            </div>
+            
+            <!-- Name -->
+            <div 
+              class="checklist-item" 
+              [class.completed]="profileData.name"
+              role="listitem">
+              <svg 
+                class="checklist-icon" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path 
+                  d="M8 12L11 15L16 9" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  *ngIf="profileData.name"/>
+              </svg>
+              <span>Name</span>
+            </div>
+            
+            <!-- Email -->
+            <div 
+              class="checklist-item" 
+              [class.completed]="profileData.email"
+              role="listitem">
+              <svg 
+                class="checklist-icon" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path 
+                  d="M8 12L11 15L16 9" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  *ngIf="profileData.email"/>
+              </svg>
+              <span>Email</span>
+            </div>
+            
+            <!-- Institute -->
+            <div 
+              class="checklist-item" 
+              [class.completed]="profileData.institute"
+              role="listitem">
+              <svg 
+                class="checklist-icon" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path 
+                  d="M8 12L11 15L16 9" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  *ngIf="profileData.institute"/>
+              </svg>
+              <span>Institute</span>
+            </div>
+            
+            <!-- Degree -->
+            <div 
+              class="checklist-item" 
+              [class.completed]="profileData.degree"
+              role="listitem">
+              <svg 
+                class="checklist-icon" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path 
+                  d="M8 12L11 15L16 9" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  *ngIf="profileData.degree"/>
+              </svg>
+              <span>Degree</span>
+            </div>
+            
+            <!-- Graduation Year -->
+            <div 
+              class="checklist-item" 
+              [class.completed]="profileData.graduationYear"
+              role="listitem">
+              <svg 
+                class="checklist-icon" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path 
+                  d="M8 12L11 15L16 9" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  *ngIf="profileData.graduationYear"/>
+              </svg>
+              <span>Graduation Year</span>
+            </div>
+            
+            <!-- Skills -->
+            <div 
+              class="checklist-item" 
+              [class.completed]="getSkillsArray().length > 0"
+              role="listitem">
+              <svg 
+                class="checklist-icon" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path 
+                  d="M8 12L11 15L16 9" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  *ngIf="getSkillsArray().length > 0"/>
+              </svg>
+              <span>Skills</span>
+            </div>
+            
+            <!-- Resume -->
+            <div 
+              class="checklist-item" 
+              [class.completed]="profileData.resume"
+              role="listitem">
+              <svg 
+                class="checklist-icon" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path 
+                  d="M8 12L11 15L16 9" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  *ngIf="profileData.resume"/>
+              </svg>
+              <span>Resume</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</div>
+
+<!-- Screen Reader Only Text Helper -->
+<style>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style>
