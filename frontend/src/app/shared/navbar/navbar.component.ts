@@ -1,6 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AlertService } from '../../core/services/alert.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +15,7 @@ export class NavbarComponent {
   isMobileMenuOpen = false;
   hasNotifications = true; // Set to true to show notification badge
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,private alertService: AlertService) {}
 
   // ===========================
   // LOGIN STATE
@@ -123,33 +124,17 @@ export class NavbarComponent {
   // LOGOUT FUNCTIONALITY
   // ===========================
   logout(): void {
-    // Clear all user data from localStorage
-    const keysToRemove = [
-      'token',
-      'username',
-      'name',
-      'email',
-      'profilePhoto',
-      'institute',
-      'degree',
-      'graduationYear',
-      'skills',
-      'userId'
-    ];
-    
-    keysToRemove.forEach(key => localStorage.removeItem(key));
-    
-    // Close menus
-    this.isDropdownOpen = false;
-    this.isMobileMenuOpen = false;
-    
-    // Navigate to home page
-    this.router.navigate(['/']);
-    
-    // Optional: Show logout success message
-    console.log('User logged out successfully');
-  }
+    // 🔐 Clear session
+    localStorage.removeItem('token');
 
+    // ✅ Custom alert
+    this.alertService.success('You have been logged out successfully', 3000);
+
+    // 🚀 Redirect after alert
+    setTimeout(() => {
+      this.router.navigate(['/']);
+    }, 500);
+  }
   // ===========================
   // NOTIFICATION HANDLING
   // ===========================

@@ -1,0 +1,10 @@
+@if (alert$ | async; as alert) {
+  <div
+    class="alert alert-{{ alert.type }} alert-dismissible fade show
+           position-fixed top-0 start-50 translate-middle mt-5"
+    role="alert"
+    style="z-index: 1055; min-width: 450px;"
+  >
+    {{ alert.message }}
+  </div>
+}

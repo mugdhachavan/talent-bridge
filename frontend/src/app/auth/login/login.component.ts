@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { AlertService } from '../../core/services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private alertService: AlertService
   ) {
     // ✅ Correct initialization (no NG error)
     this.loginForm = this.fb.group({
@@ -32,25 +34,31 @@ export class LoginComponent {
     });
   }
 
-  onSubmit(): void {
-    if (this.loginForm.invalid) return;
+onSubmit(): void {
+  if (this.loginForm.invalid) return;
 
-    this.authService.login(this.loginForm.value).subscribe({
-      next: (res) => {
-        // ✅ Save token
-        localStorage.setItem('token', res.token);
+  this.authService.login(this.loginForm.value).subscribe({
+    next: (res) => {
+      // ✅ Save token
+      localStorage.setItem('token', res.token);
 
-        // ✅ Notify auth state
-        this.authService.setLoggedIn(true);
+      // ✅ Notify auth state
+      this.authService.setLoggedIn(true);
 
-        alert('Login Successful');
+      // ✅ Custom success alert
+      this.alertService.success('Login Successful !!', 2000);
+
+      // ✅ Navigate after short delay (better UX)
+      setTimeout(() => {
         this.router.navigate(['/myprofile']);
-      },
-      error: (err) => {
-        alert(err.error?.message || 'Login Failed');
-      }
-    });
-  }
+      }, 500);
+    },
+    error: (err) => {
+      this.alertService.error(err.error?.message || 'Invalid credentials ', 4000);
+    }
+  });
+}
+
   navigateToSignUp() {
     this.router.navigate(['/signup']);
   }

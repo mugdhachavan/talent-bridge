@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { AlertService } from '../../core/services/alert.service';
 
 @Component({
   selector: 'app-signup',
@@ -24,7 +25,8 @@ export class SignupComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private alertService: AlertService
   ) {
     // Initialize the signup form
     this.signupForm = this.fb.group({
@@ -67,17 +69,24 @@ export class SignupComponent {
     if (this.resume) formData.append('resume', this.resume);
 
     // Call signup API
-    this.authService.signup(formData).subscribe({
-      next: (res: any) => {
-        alert('✅ Signup successful! Your account has been created.');
-        // optional redirect
-        this.router.navigate(['/login']);
-      },
-      error: (err: any) => {
-        const message =
-          err?.error?.message || '❌ Signup failed. Please try again.';
-        alert(message);
-      }
-    });
+this.authService.signup(formData).subscribe({
+  next: (res: any) => {
+    // ✅ Custom success alert
+    this.alertService.success('Signup successful! Your account has been created.',3000 );
+
+    // ✅ Optional redirect (after alert shows)
+    setTimeout(() => {
+      this.router.navigate(['/login']);
+    }, 500);
+  },
+  error: (err: any) => {
+    const message = err?.error?.message || 'Signup failed. Please try again.';
+    this.alertService.error(message, 4000);
+  }
+});
+
+  }
+  navigateToLogIn() {
+    this.router.navigate(['/login']);
   }
 }
