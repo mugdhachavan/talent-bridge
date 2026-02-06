@@ -18,30 +18,27 @@ exports.getMyProfile = async (req, res) => {
 
 exports.updateMyProfile = async (req, res) => {
   try {
-    console.log("REQ.USER 👉", req.user);
-
     const userId = req.user.id || req.user.userId;
 
-    const user = await User.findOne({
-      where: { id: userId }
-    });
+    const user = await User.findByPk(userId);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found in database" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     await user.update(req.body);
 
-    res.json({
+    res.status(200).json({
+      success: true,
       message: "Profile updated successfully",
       data: user
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 exports.downloadResume = async (req, res) => {
   try {
@@ -55,5 +52,27 @@ exports.downloadResume = async (req, res) => {
     res.download(user.resume);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deleteMyProfile = async (req, res) => {
+  try {
+    const userId = req.user.id || req.user.userId;
+
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await user.destroy();
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile deleted successfully"
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
   }
 };

@@ -14,4 +14,8 @@ router.put("/me",authMiddleware,uploadFiles,profileController.updateMyProfile);
 // Download resume
 router.get("/me/resume/:id",profileController.downloadResume);
 
+// Delete own profile
+router.delete("/me",authMiddleware,profileController.deleteMyProfile);
+
+
 module.exports = router;
